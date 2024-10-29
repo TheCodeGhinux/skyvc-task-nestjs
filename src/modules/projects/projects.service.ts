@@ -11,8 +11,18 @@ import { Project } from './entities/project.schema';
 export class ProjectsService {
   constructor(@InjectModel(Project.name) private projectModel: Model<Project>) {}
 
-  create(createProjectDto: CreateProjectDto) {
-    return 'This action adds a new project';
+  async createProject(createProjectDto: CreateProjectDto, user) {
+    const newProject = new this.projectModel(createProjectDto);
+    if (!newProject) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_FAILED("Creating new project"), HttpStatus.BAD_REQUEST)
+    }
+    newProject.owner = user.id
+
+    await newProject.save();
+    return {
+      message: SYS_MSG.RESOURCE_FOUND('Projects'),
+      data: newProject,
+    };
   }
 
   async findAll() {

@@ -14,9 +14,6 @@ export class Project {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: Types.ObjectId;
 
-  @Prop({ default: Date.now })
-  created_at: Date;
-
   @Prop()
   isDeletted: boolean;
 }

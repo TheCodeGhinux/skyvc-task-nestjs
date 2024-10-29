@@ -20,6 +20,9 @@ export const RESOURCE_NOT_FOUND = resource => {
 export const RESOURCE_FOUND = resource => {
   return `${resource} fetched successfully`;  
 };
+export const RESOURCE_FAILED = resource => {
+  return `${resource} failed`;  
+};
 
 export const BAD_REQUEST = 'Bad request error';
 export const INVALID_CREDENTIALS = 'Invalid credentials';
