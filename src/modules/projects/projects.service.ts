@@ -25,7 +25,7 @@ export class ProjectsService {
     };
   }
 
-  async findAll() {
+  async findAllProject() {
     const projects = await this.projectModel.find().exec();
 
     return {

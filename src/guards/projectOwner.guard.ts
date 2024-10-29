@@ -27,7 +27,7 @@ export class ProjectOwnerGuard implements CanActivate {
     }
 
     const payload = request.user;
-    const projectId = request.params.projectId;
+    const projectId = request.params.id || request.params.projectId;
 
     // Fetch project details to check ownership
     const project = await this.projectsService.getProjectById(projectId); 

@@ -11,8 +11,8 @@ export class CreateProjectDto {
   name: string;
 
   @ApiProperty({
-    description: 'The email address of the user',
-    example: 'user@example.com',
+    description: 'The description of the project',
+    example: 'Project 1 description',
   })
   @IsString()
   description?: string;
