@@ -5,7 +5,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { skipAuth } from '@/helpers/skipAuth';
 import { AdminGuard } from '@/guards/admin.guard';
 import { ProjectOwnerGuard } from '@/guards/projectOwner.guard';
-import { CreatePrjectDoc, GetAllPrjectByDoc, GetPrjectByIdDoc } from './docs/project-swagger.doc';
+import { CreatePrjectDoc, GetAllPrjectByDoc, GetPrjectByIdDoc, UpdateProjectDoc } from './docs/project-swagger.doc';
 
 @Controller('projects')
 export class ProjectsController {
@@ -32,9 +32,11 @@ export class ProjectsController {
     return this.projectsService.findProductById(id);
   }
 
+  @UpdateProjectDoc()
+  @UseGuards(ProjectOwnerGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.update(+id, updateProjectDto);
+  updateProject(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+    return this.projectsService.updateProject(id, updateProjectDto);
   }
 
   @Delete(':id')

@@ -14,6 +14,7 @@ import {
 import { CreateProjectDto } from '../dto/create-project.dto';
 import { ProjectBadRequestResponseDto, ProjectForbiddenResponseDto, ProjectNotFoundResponseDto, ProjectPermissionResponseDto, ProjectResponseDto } from '../dto/project-response.dto';
 import { LoginErrorResponseDto } from '@/modules/auth/dto/login-error-dto';
+import { UpdateProjectDto } from '../dto/update-project.dto';
 
 export function CreatePrjectDoc() {
   return applyDecorators(
@@ -35,6 +36,23 @@ export function GetPrjectByIdDoc() {
     ApiBearerAuth(),
     ApiOperation({ summary: 'Get a project by id' }),
     ApiResponse({ status: 200, description: 'Project fetched successfully', type: ProjectResponseDto }),
+    ApiUnauthorizedResponse({ status: 401, description: 'Login Error', type: ProjectPermissionResponseDto }),
+    ApiForbiddenResponse({ status: 403, description: 'Permission Error', type: ProjectForbiddenResponseDto }),
+    ApiBadRequestResponse({status: 400, description: "Invalid id", type: ProjectBadRequestResponseDto }),
+    ApiNotFoundResponse({status: 404, description: "Not Found Error", type: ProjectNotFoundResponseDto })
+  );
+}
+
+export function UpdateProjectDoc() {
+  return applyDecorators(
+    ApiTags('Projects'),
+    ApiBearerAuth(),
+    ApiOperation({ summary: 'Update a project' }),
+    ApiBody({
+      description: 'Update project body',
+      type: UpdateProjectDto,
+    }),
+    ApiResponse({ status: 200, description: 'Project updated successfully', type: ProjectResponseDto }),
     ApiUnauthorizedResponse({ status: 401, description: 'Login Error', type: ProjectPermissionResponseDto }),
     ApiForbiddenResponse({ status: 403, description: 'Permission Error', type: ProjectForbiddenResponseDto }),
     ApiBadRequestResponse({status: 400, description: "Invalid id", type: ProjectBadRequestResponseDto }),

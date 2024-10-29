@@ -14,9 +14,9 @@ export class ProjectsService {
   async createProject(createProjectDto: CreateProjectDto, user) {
     const newProject = new this.projectModel(createProjectDto);
     if (!newProject) {
-      throw new CustomHttpException(SYS_MSG.RESOURCE_FAILED("Creating new project"), HttpStatus.BAD_REQUEST)
+      throw new CustomHttpException(SYS_MSG.RESOURCE_FAILED('Creating new project'), HttpStatus.BAD_REQUEST);
     }
-    newProject.owner = user.id
+    newProject.owner = user.id;
 
     await newProject.save();
     return {
@@ -40,15 +40,30 @@ export class ProjectsService {
     if (!project) {
       throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Project'), HttpStatus.NOT_FOUND);
     }
-    console.log(project);
     return {
       message: SYS_MSG.RESOURCE_FOUND('Project'),
       data: project,
     };
   }
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
+  async updateProject(id: string, updateProjectDto: UpdateProjectDto) {
+    const project = await this.getProjectById(id);
+    if (!project) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Project'), HttpStatus.NOT_FOUND);
+    }
+
+    const updatedProject = await this.projectModel.findOneAndUpdate(
+      { _id: id },
+      { $set: updateProjectDto },
+      { new: true }
+    );
+    if (!updatedProject) {
+      throw new CustomHttpException(SYS_MSG.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+    }
+    return {
+      message: SYS_MSG.RESOURCE_UPDATED('Project'),
+      data: updatedProject,
+    };
   }
 
   remove(id: number) {

@@ -20,6 +20,9 @@ export const RESOURCE_NOT_FOUND = resource => {
 export const RESOURCE_FOUND = resource => {
   return `${resource} fetched successfully`;  
 };
+export const RESOURCE_UPDATED = resource => {
+  return `${resource} updated successfully`;  
+};
 export const RESOURCE_FAILED = resource => {
   return `${resource} failed`;  
 };
