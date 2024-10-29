@@ -26,11 +26,11 @@ export class Task {
   @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId;
 
-  @Prop({ default: false, alias: 'is_deleted' })
-  isDeleted: boolean;
+  @Prop({ default: false})
+  is_deleted: boolean;
 
-  @Prop({ type: Date, alias: 'deleted_at' })
-  deletedAt?: Date; 
+  @Prop({ type: Date})
+  deleted_at?: Date; 
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

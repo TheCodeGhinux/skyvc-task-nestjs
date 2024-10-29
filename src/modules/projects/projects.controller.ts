@@ -5,7 +5,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { skipAuth } from '../../helpers/skipAuth';
 import { AdminGuard } from '../../guards/admin.guard';
 import { ProjectOwnerGuard } from '../../guards/projectOwner.guard';
-import { CreatePrjectDoc, GetAllPrjectByDoc, GetPrjectByIdDoc, UpdateProjectDoc } from './docs/project-swagger.doc';
+import { CreatePrjectDoc, DeleteProjectDoc, GetAllPrjectByDoc, GetPrjectByIdDoc, UpdateProjectDoc } from './docs/project-swagger.doc';
 
 @Controller('projects')
 export class ProjectsController {
@@ -39,6 +39,7 @@ export class ProjectsController {
     return this.projectsService.updateProject(id, updateProjectDto);
   }
 
+  @DeleteProjectDoc()
   @UseGuards(ProjectOwnerGuard)
   @Delete(':id')
   deleteProject(@Param('id') id: string) {
