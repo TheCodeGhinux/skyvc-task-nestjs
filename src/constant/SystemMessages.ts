@@ -26,6 +26,9 @@ export const RESOURCE_UPDATED = resource => {
 export const RESOURCE_FAILED = resource => {
   return `${resource} failed`;  
 };
+export const RESOURCE_DELETED = resource => {
+  return `${resource} deleted successfully`; 
+};
 
 export const BAD_REQUEST = 'Bad request error';
 export const INVALID_CREDENTIALS = 'Invalid credentials';

@@ -2,9 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } fro
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { skipAuth } from '@/helpers/skipAuth';
-import { AdminGuard } from '@/guards/admin.guard';
-import { ProjectOwnerGuard } from '@/guards/projectOwner.guard';
+import { skipAuth } from '../../helpers/skipAuth';
+import { AdminGuard } from '../../guards/admin.guard';
+import { ProjectOwnerGuard } from '../../guards/projectOwner.guard';
 import { CreatePrjectDoc, GetAllPrjectByDoc, GetPrjectByIdDoc, UpdateProjectDoc } from './docs/project-swagger.doc';
 
 @Controller('projects')
@@ -39,8 +39,9 @@ export class ProjectsController {
     return this.projectsService.updateProject(id, updateProjectDto);
   }
 
+  @UseGuards(ProjectOwnerGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectsService.remove(+id);
+  deleteProject(@Param('id') id: string) {
+    return this.projectsService.deleteProject(id);
   }
 }

@@ -3,7 +3,7 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type UserDocument = HydratedDocument<Project>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Project {
   @Prop({ required: true })
   name: string;
@@ -14,8 +14,11 @@ export class Project {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: Types.ObjectId;
 
-  @Prop()
-  isDeletted: boolean;
+  @Prop({ default: false})
+  is_deleted: boolean;
+
+  @Prop({ type: Date})
+  deleted_at?: Date; 
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

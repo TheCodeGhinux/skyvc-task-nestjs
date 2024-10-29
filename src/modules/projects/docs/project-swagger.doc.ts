@@ -71,3 +71,17 @@ export function GetAllPrjectByDoc() {
     ApiForbiddenResponse({ status: 403, description: 'Permission Error', type: ProjectForbiddenResponseDto }),
   );
 }
+
+
+export function DeleteProjectDoc() {
+  return applyDecorators(
+    ApiTags('Projects'),
+    ApiBearerAuth(),
+    ApiOperation({ summary: 'Delete a project' }),
+    ApiResponse({ status: 200, description: 'Project deleted successfully' }),
+    ApiUnauthorizedResponse({ status: 401, description: 'Login Error', type: ProjectPermissionResponseDto }),
+    ApiForbiddenResponse({ status: 403, description: 'Permission Error', type: ProjectForbiddenResponseDto }),
+    ApiBadRequestResponse({ status: 400, description: 'Invalid project ID', type: ProjectBadRequestResponseDto }),
+    ApiNotFoundResponse({ status: 404, description: 'Project not found', type: ProjectNotFoundResponseDto }),
+  );
+}

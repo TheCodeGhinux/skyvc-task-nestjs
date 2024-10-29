@@ -3,15 +3,16 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import * as SYS_MSG from '@constant/SystemMessages';
-import { CustomHttpException } from '@/helpers/custom-http-filter';
 import { Project } from './entities/project.schema';
+import * as SYS_MSG from '../../constant/SystemMessages';
+import { CustomHttpException } from '../../helpers/custom-http-filter';
+import { User } from '../user/entities/user.schema';
 
 @Injectable()
 export class ProjectsService {
   constructor(@InjectModel(Project.name) private projectModel: Model<Project>) {}
 
-  async createProject(createProjectDto: CreateProjectDto, user) {
+  async createProject(createProjectDto: CreateProjectDto, user: any) {
     const newProject = new this.projectModel(createProjectDto);
     if (!newProject) {
       throw new CustomHttpException(SYS_MSG.RESOURCE_FAILED('Creating new project'), HttpStatus.BAD_REQUEST);
@@ -26,7 +27,7 @@ export class ProjectsService {
   }
 
   async findAllProject() {
-    const projects = await this.projectModel.find().exec();
+    const projects = await this.projectModel.find({ is_deleted: false }).exec()
 
     return {
       message: SYS_MSG.RESOURCE_FOUND('Projects'),
@@ -66,12 +67,25 @@ export class ProjectsService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async deleteProject(id: string) {
+    const project = await this.getProjectById(id);
+    if (!project) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Project'), HttpStatus.NOT_FOUND);
+    }
+    const updatedProject = await this.projectModel.findByIdAndUpdate(
+      id,
+      { is_deleted: true, deleted_at: new Date() },
+      { new: true }
+    );
+  
+    return {
+      message: SYS_MSG.RESOURCE_DELETED('Project'),
+      data: updatedProject,
+    };
   }
 
   async getProjectById(id: string) {
-    const project = await this.projectModel.findOne({ _id: id }).exec();
+    const project = await this.projectModel.findOne({ _id: id, is_deleted: false });
     return project;
   }
 }
