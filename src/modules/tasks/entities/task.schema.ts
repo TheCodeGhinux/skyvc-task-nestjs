@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 export enum TaskStatus {
   PENDING = 'pending',
@@ -7,7 +7,7 @@ export enum TaskStatus {
   COMPLETED = 'completed',
 }
 
-export type TaskDocument = Task & Document;
+export type UserDocument = HydratedDocument<Task>;
 
 @Schema({ timestamps: true })
 export class Task {
@@ -21,7 +21,7 @@ export class Task {
   status: TaskStatus;
 
   @Prop({ required: false })
-  due_date?: Date;
+  due_date?: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId;

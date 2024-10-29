@@ -14,11 +14,11 @@ export class Project {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: Types.ObjectId;
 
-  @Prop({ default: false})
+  @Prop({ default: false })
   is_deleted: boolean;
 
-  @Prop({ type: Date})
-  deleted_at?: Date; 
+  @Prop({ type: Date })
+  deleted_at?: Date;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

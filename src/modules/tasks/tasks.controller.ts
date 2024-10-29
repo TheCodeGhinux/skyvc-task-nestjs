@@ -11,9 +11,9 @@ export class TasksController {
 
   @CreateTaskDoc()
   @UseGuards(ProjectOwnerGuard)
-  @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  @Post(':projectId/create')
+  createTask(@Body() createTaskDto: CreateTaskDto, @Param('projectId') projectId: string) {
+    return this.tasksService.createTask(createTaskDto, projectId);
   }
 
   @GetAllTaskByDoc()

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty } from "class-validator";
+import { IsString, IsNotEmpty, IsEnum } from "class-validator";
 import { TaskStatus } from "../entities/task.schema";
 
 export class CreateTaskDto {
@@ -8,7 +8,7 @@ export class CreateTaskDto {
     example: 'Project 1',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({message: "Please provide a task title"})
   title: string;
 
   @ApiProperty({
@@ -23,6 +23,8 @@ export class CreateTaskDto {
     example: 'pending',
   })
   @IsString()
+  @IsEnum(TaskStatus, { message: "Status must be one of the following: 'pending', 'in_progress', 'completed'." })
+  @IsNotEmpty({message: "Please provide a valid task status"})
   status?: TaskStatus;
   
   @ApiProperty({
@@ -30,5 +32,6 @@ export class CreateTaskDto {
     example: '2024-10-29',
   })
   @IsString()
+  @IsNotEmpty({message: "Please provide a due date"})
   due_date?: string;
 }
