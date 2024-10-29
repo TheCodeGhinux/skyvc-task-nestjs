@@ -49,8 +49,8 @@ export class TasksService {
 
   }
 
-  findAllTask() {
-    const tasks = this.taskModel.find({ is_deleted: false }).populate({path: 'project', select: 'name description'}).exec();
+  async findAllTask() {
+    const tasks = await this.taskModel.find({ is_deleted: false }).populate({path: 'project', select: 'name description', strictPopulate: false}).exec();
 
     return {
       message: SYS_MSG.RESOURCE_FOUND('All tasks'),
@@ -71,12 +71,41 @@ export class TasksService {
     };
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: string, updateTaskDto: UpdateTaskDto) {
+    const task = await this.getTaskById(id);
+    if (!task) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Task'), HttpStatus.NOT_FOUND);
+    }
+
+    const updatedTask = await this.taskModel.findOneAndUpdate(
+      { _id: id },
+      { $set: updateTaskDto },
+      { new: true }
+    );
+    if (!updatedTask) {
+      throw new CustomHttpException(SYS_MSG.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+    }
+    return {
+      message: SYS_MSG.RESOURCE_UPDATED('Task'),
+      data: updatedTask,
+    };
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} task`;
+  async deleteTask(id: string) {
+    const task = await this.getTaskById(id);
+    if (!task) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Task'), HttpStatus.NOT_FOUND);
+    }
+    const updatedTask = await this.taskModel.findByIdAndUpdate(
+      id,
+      { is_deleted: true, deleted_at: new Date() },
+      { new: true }
+    );
+
+    return {
+      message: SYS_MSG.RESOURCE_DELETED('Task'),
+      data: updatedTask,
+    };
   }
 
   async getTaskById(id: string) {

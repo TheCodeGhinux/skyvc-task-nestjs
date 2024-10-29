@@ -50,7 +50,7 @@ export class TasksController {
   @DeleteTaskDoc()
   @UseGuards(TaskOwnerGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(id);
+  deleteTask(@Param('id') id: string) {
+    return this.tasksService.deleteTask(id);
   }
 }
