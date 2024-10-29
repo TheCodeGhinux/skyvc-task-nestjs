@@ -1,34 +1,48 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { skipAuth } from '../../helpers/skipAuth';
+import { AdminGuard } from '../../guards/admin.guard';
+import { ProjectOwnerGuard } from '../../guards/projectOwner.guard';
+import { CreatePrjectDoc, DeleteProjectDoc, GetAllPrjectByDoc, GetPrjectByIdDoc, UpdateProjectDoc } from './docs/project-swagger.doc';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
+  @CreatePrjectDoc()
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectsService.create(createProjectDto);
+  createProject(@Body() createProjectDto: CreateProjectDto, @Req() req) {
+    const user = req.user
+    return this.projectsService.createProject(createProjectDto, user);
   }
 
+  @GetAllPrjectByDoc()
+  @UseGuards(AdminGuard)
   @Get()
-  findAll() {
-    return this.projectsService.findAll();
+  findAllProject() {
+    return this.projectsService.findAllProject();
   }
 
+  @GetPrjectByIdDoc()
+  @UseGuards(ProjectOwnerGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.projectsService.findOne(+id);
+  async findProductById(@Param('id') id: string) {
+    return this.projectsService.findProductById(id);
   }
 
+  @UpdateProjectDoc()
+  @UseGuards(ProjectOwnerGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.update(+id, updateProjectDto);
+  updateProject(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+    return this.projectsService.updateProject(id, updateProjectDto);
   }
 
+  @DeleteProjectDoc()
+  @UseGuards(ProjectOwnerGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectsService.remove(+id);
+  deleteProject(@Param('id') id: string) {
+    return this.projectsService.deleteProject(id);
   }
 }

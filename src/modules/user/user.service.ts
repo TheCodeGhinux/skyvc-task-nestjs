@@ -34,7 +34,19 @@ export default class UserService {
     return user;
   }
 
-  private async getUserById(identifier: string) {
+  async getUserByUsername(username: string) {
+    const user: UserResponseDTO = await this.userModel.findOne({ username });
+    if(!user) {
+      throw new CustomHttpException(SYS_MSG.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
+
+    return {
+      message: SYS_MSG.RESOURCE_FOUND('User'),
+      data: user,
+    };
+  }
+
+  async getUserById(identifier: string) {
     const user: UserResponseDTO = await this.userModel.findById(identifier);
     return user;
   }

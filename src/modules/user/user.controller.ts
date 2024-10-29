@@ -7,12 +7,6 @@ import {
   Patch,
   Query,
   Req,
-  Request,
-  UseGuards,
-  Res,
-  StreamableFile,
-  Header,
-  ParseEnumPipe,
   Delete,
 } from '@nestjs/common';
 import {
@@ -23,7 +17,7 @@ import { UpdateUserDto } from '@user/dto/update-user-dto';
 import { UserPayload } from '@user/interfaces/user-payload.interface';
 import UserService from '@user/user.service';
 import { skipAuth } from '@helpers/skipAuth';
-import { Response } from 'express';
+// import { Request, Response } from 'express';
 import * as path from 'path';
 import { SoftDeleteUserDocs, UpdateUserDocs } from '@user/docs/user-swagger.doc';
 
@@ -42,6 +36,21 @@ export class UserController {
   // ) {
   //   return this.userService.updateUser(userId, updatedUserDto, req.user);
   // }
+
+
+  // @Get(':userId')
+  // async getUser(@Req() req) {
+  //   const username = req.user.username;
+  //   console.log(username);
+    
+  //   return this.userService.getUserByUsername(username);
+  // }
+
+  @Get()
+  async getUserByUsername(@Req() req) {
+    const username = req.user.username;
+    return await this.userService.getUserByUsername(username);
+  }
 
   @Delete(':userId')
   @SoftDeleteUserDocs()

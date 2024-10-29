@@ -18,6 +18,8 @@ import { join } from 'path';
 import { DatabaseModule } from './database/database.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { AdminGuard } from './guards/admin.guard';
+import { ProjectOwnerGuard } from './guards/projectOwner.guard';
 @Module({
   providers: [
     {
@@ -36,6 +38,14 @@ import { TasksModule } from './modules/tasks/tasks.module';
       provide: 'APP_GUARD',
       useClass: AuthGuard,
     },
+    // {
+    //   provide: 'ADMIN_GUARD',
+    //   useClass: AdminGuard,
+    // },
+    // {
+    //   provide: 'OWNER_GUARD',
+    //   useClass: ProjectOwnerGuard,
+    // },
   ],
   imports: [
     ConfigModule.forRoot({
