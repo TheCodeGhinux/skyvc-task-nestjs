@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { skipAuth } from '@helpers/skipAuth';
+import { skipAuth } from './helpers/skipAuth';
 import * as os from 'os';
 
 @Controller()

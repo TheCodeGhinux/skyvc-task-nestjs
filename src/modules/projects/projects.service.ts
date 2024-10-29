@@ -27,7 +27,10 @@ export class ProjectsService {
   }
 
   async findAllProject() {
-    const projects = await this.projectModel.find({ is_deleted: false }).populate({ path: 'tasks', select: 'title description status due_date created_at', strictPopulate: false }).exec();
+    const projects = await this.projectModel
+      .find({ is_deleted: false })
+      .populate({ path: 'tasks', select: 'title description status due_date created_at', strictPopulate: false })
+      .exec();
 
     return {
       message: SYS_MSG.RESOURCE_FOUND('Projects'),

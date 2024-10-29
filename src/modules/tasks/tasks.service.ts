@@ -1,9 +1,9 @@
+import { InjectModel } from '@nestjs/mongoose';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import * as SYS_MSG from '../../constant/SystemMessages';
 import { CustomHttpException } from '../../helpers/custom-http-filter';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Task } from './entities/task.schema';
 import { ProjectsService } from '../projects/projects.service';
