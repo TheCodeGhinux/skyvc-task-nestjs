@@ -5,13 +5,20 @@ export const ERROR_OCCURED = 'Error Occured Performing this request';
 export const USER_ACCOUNT_EXIST = 'Account with the specified email exists';
 export const USER_ACCOUNT_DOES_NOT_EXIST = "Account with the specified email doesn't exist";
 export const UNAUTHENTICATED_MESSAGE = 'User is currently unauthorized, kindly authenticate to continue';
+export const UNAUTHORIZED_MESSAGE = 'You do not have the permission to perform this action';
 export const USER_NOT_FOUND = 'User not found!';
 export const INVALID_PASSWORD = 'Invalid password';
 export const LOGIN_SUCCESSFUL = 'Login successful';
 export const LOGIN_ERROR = 'An error occurred during login';
 export const FORBIDDEN_ACTION = 'You do not have the permission to perform this action';
-export const RESOURCE_NOT_FOUND = resource => {
+export const RESOURCE_NOT_EXIST = resource => {
   return `${resource} does not exist`;
+};
+export const RESOURCE_NOT_FOUND = resource => {
+  return `${resource} not found`;
+};
+export const RESOURCE_FOUND = resource => {
+  return `${resource} fetched successfully`;  
 };
 
 export const BAD_REQUEST = 'Bad request error';

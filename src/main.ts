@@ -8,6 +8,7 @@ import { AppModule } from '@/app.module';
 import { SeedingService } from '@db/seeding/seeding.service';
 import { ResponseInterceptor } from '@shared/inteceptors/response.interceptor';
 import findAvailablePort from '@helpers/find-port';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
@@ -25,6 +26,7 @@ async function bootstrap() {
   // const seedingService = app.get(SeedingService);
   // await seedingService.seedDatabase();
 
+  app.use(cookieParser());
   app.enable('trust proxy');
   app.useLogger(logger);
   app.enableCors();

@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
   }
 
   // Extract token from Authorization header or cookie
-  private async extractTokenFromRequest(request: Request): Promise<string | undefined> {
+  async extractTokenFromRequest(request: Request): Promise<string | undefined> {
     const authHeaderToken = this.extractTokenFromHeader(request);
 
     if (authHeaderToken) {
@@ -66,13 +66,13 @@ export class AuthGuard implements CanActivate {
 
     // Check cookies for access_token
     const cookieToken = request.cookies?.access_token;
+
     if (cookieToken) {
       try {
         // Verify if the cookie token is valid
         await this.jwtService.verifyAsync(cookieToken, {
           secret: appConfig().jwtSecret,
         });
-        console.log('Valid token from cookies:', cookieToken);
         return cookieToken;
       } catch (error) {
         // Token is invalid or expired, silently continue

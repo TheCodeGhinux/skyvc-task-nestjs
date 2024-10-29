@@ -8,6 +8,8 @@ interface UserInterface {
   last_name: string;
 
   password: string;
+
+  role: string;
 }
 
 export default UserInterface;

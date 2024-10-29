@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { skipAuth } from '@/helpers/skipAuth';
+import { AdminGuard } from '@/guards/admin.guard';
+import { ProjectOwnerGuard } from '@/guards/projectOwner.guard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -12,14 +15,16 @@ export class ProjectsController {
     return this.projectsService.create(createProjectDto);
   }
 
+  @UseGuards(AdminGuard)
   @Get()
   findAll() {
     return this.projectsService.findAll();
   }
 
+  // @UseGuards(ProjectOwnerGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.projectsService.findOne(+id);
+  async findProductById(@Param('id') id: string) {
+    return this.projectsService.findProductById(id);
   }
 
   @Patch(':id')

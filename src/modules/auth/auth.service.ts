@@ -44,6 +44,7 @@ export default class AuthenticationService {
       sub: user._id,
       email: user.email,
       username: user.username,
+      role: user.role,
     });
 
     const responsePayload = {
@@ -51,6 +52,7 @@ export default class AuthenticationService {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role
       },
     };
 
@@ -78,15 +80,17 @@ export default class AuthenticationService {
     if (!isMatch) {
       throw new CustomHttpException(SYS_MSG.WRONG_PASSWORD, HttpStatus.UNAUTHORIZED);
     }
-    const payload = { id: user._id, sub: user._id, email: user.email, username: user.username };
+    const payload = { id: user._id, sub: user._id, email: user.email, username: user.username, role: user.role };
     const access_token = await this.jwtService.signAsync(payload);
-    const cookie = this.setCookie(access_token, res);
+    const cookie = await this.setCookie(access_token, res);
+
     const responsePayload = {
       access_token,
       data: {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role
       },
     };
 
