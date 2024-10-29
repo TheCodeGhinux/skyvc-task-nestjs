@@ -32,7 +32,7 @@ export class TasksService {
 
     project.tasks.push(newTask._id);
     await project.save();
-    
+
     return {
       message: SYS_MSG.RESOURCE_CREATED('Task'),
       data: newTask,
@@ -43,31 +43,55 @@ export class TasksService {
     const tasks = await this.taskModel.find({ owner: userId, is_deleted: false }).populate('project').exec();
 
     return {
-      message: SYS_MSG.RESOURCE_FOUND('Tasks'),
+      message: SYS_MSG.RESOURCE_FOUND("All user's tasks"),
       data: tasks,
     };
 
   }
 
-  findAll() {
-    return `This action returns all tasks`;
+  findAllTask() {
+    const tasks = this.taskModel.find({ is_deleted: false }).populate({path: 'project', select: 'name description'}).exec();
+
+    return {
+      message: SYS_MSG.RESOURCE_FOUND('All tasks'),
+      data: tasks,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findTaskByID(id: string) {
+    const task = await this.getTaskById(id);
+
+    if(!task) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Task'), HttpStatus.NOT_FOUND);
+    }
+    
+    return {
+      message: SYS_MSG.RESOURCE_FOUND('All tasks'),
+      data: task,
+    };
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
+  update(id: string, updateTaskDto: UpdateTaskDto) {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} task`;
   }
 
   async getTaskById(id: string) {
-    const task = await this.taskModel.findOne({ _id: id, is_deleted: false }).populate('project').exec();
+    const task = await this.taskModel.findOne({ _id: id, is_deleted: false }).populate({path: 'project', select: 'name description'}).exec();
 
     return task;
+  }
+
+  async getProjectIdFromTask(taskId: string) {
+    const task = await this.taskModel.findById(taskId).select('project');
+  
+    if (!task) {
+      throw new CustomHttpException(SYS_MSG.RESOURCE_NOT_FOUND('Task'), HttpStatus.NOT_FOUND);
+    }
+  
+    return task.project;
   }
 }
