@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -20,6 +20,13 @@ export class TasksController {
   @Get()
   findAllTask() {
     return this.tasksService.findAll();
+  }
+
+  @GetAllTaskByDoc()
+  @Get('user')
+  findUserTasks(@Req() req) {
+    const userId = req.user.id;
+    return this.tasksService.findUserTasks(userId);
   }
 
   @GetTaskByIdDoc()

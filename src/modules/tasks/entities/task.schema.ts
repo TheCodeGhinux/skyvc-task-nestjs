@@ -9,7 +9,7 @@ export enum TaskStatus {
 
 export type UserDocument = HydratedDocument<Task>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Task {
   @Prop({ required: true })
   title: string;
@@ -22,6 +22,9 @@ export class Task {
 
   @Prop({ required: false })
   due_date?: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  owner: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId;

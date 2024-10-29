@@ -14,6 +14,9 @@ export class Project {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: Types.ObjectId;
 
+  @Prop({ type: [Types.ObjectId], ref: 'Task', default: [] })
+  tasks: Types.ObjectId[];
+
   @Prop({ default: false })
   is_deleted: boolean;
 

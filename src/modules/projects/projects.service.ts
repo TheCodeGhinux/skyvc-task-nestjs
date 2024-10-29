@@ -27,7 +27,7 @@ export class ProjectsService {
   }
 
   async findAllProject() {
-    const projects = await this.projectModel.find({ is_deleted: false }).exec()
+    const projects = await this.projectModel.find({ is_deleted: false }).populate({ path: 'tasks', select: 'title description status due_date created_at', strictPopulate: false }).exec();
 
     return {
       message: SYS_MSG.RESOURCE_FOUND('Projects'),
@@ -77,7 +77,7 @@ export class ProjectsService {
       { is_deleted: true, deleted_at: new Date() },
       { new: true }
     );
-  
+
     return {
       message: SYS_MSG.RESOURCE_DELETED('Project'),
       data: updatedProject,
@@ -85,7 +85,10 @@ export class ProjectsService {
   }
 
   async getProjectById(id: string) {
-    const project = await this.projectModel.findOne({ _id: id, is_deleted: false });
+    const project = await this.projectModel
+      .findOne({ _id: id, is_deleted: false })
+      .populate({ path: 'tasks', select: 'title description status due_date created_at', strictPopulate: false })
+      .exec();
     return project;
   }
 }

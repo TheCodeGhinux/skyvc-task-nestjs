@@ -25,13 +25,28 @@ export class TasksService {
     if (!newTask) {
       throw new CustomHttpException(SYS_MSG.RESOURCE_FAILED('Creating new Task'), HttpStatus.BAD_REQUEST);
     }
+    newTask.owner = project.owner;
     newTask.project = project.id;
 
     await newTask.save();
+
+    project.tasks.push(newTask._id);
+    await project.save();
+    
     return {
       message: SYS_MSG.RESOURCE_CREATED('Task'),
       data: newTask,
     };
+  }
+
+  async findUserTasks(userId: string) {
+    const tasks = await this.taskModel.find({ owner: userId, is_deleted: false }).populate('project').exec();
+
+    return {
+      message: SYS_MSG.RESOURCE_FOUND('Tasks'),
+      data: tasks,
+    };
+
   }
 
   findAll() {
@@ -51,7 +66,7 @@ export class TasksService {
   }
 
   async getTaskById(id: string) {
-    const task = await this.taskModel.findOne({ _id: id, is_deleted: false }).exec();
+    const task = await this.taskModel.findOne({ _id: id, is_deleted: false }).populate('project').exec();
 
     return task;
   }
