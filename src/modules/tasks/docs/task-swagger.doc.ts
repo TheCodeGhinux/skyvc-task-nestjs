@@ -14,7 +14,7 @@ import {
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { TaskBadRequestResponseDto, TaskForbiddenResponseDto, TaskNotFoundResponseDto, TaskPermissionResponseDto, TaskResponseDto } from '../dto/task-response.dto';
 import { LoginErrorResponseDto } from '../../auth/dto/login-error-dto';
-import { UpdateTaskDto } from '../dto/update-Task.dto';
+import { UpdateTaskDto } from '../dto/update-task.dto';
 
 export function CreateTaskDoc() {
   return applyDecorators(
