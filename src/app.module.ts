@@ -18,8 +18,9 @@ import { join } from 'path';
 import { DatabaseModule } from './database/database.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { TasksModule } from './modules/tasks/tasks.module';
-import { AdminGuard } from './guards/admin.guard';
-import { ProjectOwnerGuard } from './guards/projectOwner.guard';
+
+import { CacheModule } from '@nestjs/cache-manager';
+
 @Module({
   providers: [
     {
@@ -81,6 +82,7 @@ import { ProjectOwnerGuard } from './guards/projectOwner.guard';
     ProjectsModule,
 
     TasksModule,
+    CacheModule.register({ isGlobal: true })
   ],
   controllers: [HealthController, ProbeController],
 })

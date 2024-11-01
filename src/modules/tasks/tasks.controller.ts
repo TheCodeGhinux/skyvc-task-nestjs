@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, UseInterceptors } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -6,6 +6,7 @@ import { CreateTaskDoc, DeleteTaskDoc, GetAllTaskByDoc, GetTaskByIdDoc, UpdateTa
 import { ProjectOwnerGuard } from '@/guards/projectOwner.guard';
 import { AdminGuard } from '@/guards/admin.guard';
 import { TaskOwnerGuard } from '@/guards/task-owner.guard';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('tasks')
 export class TasksController {
@@ -18,6 +19,7 @@ export class TasksController {
     return this.tasksService.createTask(createTaskDto, projectId);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @GetAllTaskByDoc()
   @UseGuards(AdminGuard)
   @Get()
@@ -25,6 +27,7 @@ export class TasksController {
     return this.tasksService.findAllTask();
   }
 
+  @UseInterceptors(CacheInterceptor)
   @GetAllTaskByDoc()
   @UseGuards(TaskOwnerGuard)
   @Get('user')
@@ -33,6 +36,7 @@ export class TasksController {
     return this.tasksService.findUserTasks(userId);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @GetTaskByIdDoc()
   @UseGuards(TaskOwnerGuard)
   @Get(':id')
