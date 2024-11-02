@@ -1,5 +1,7 @@
 export interface UserPayload {
   id: string;
+  sub: string;
   email: string;
-  // user_type: UserType;
+  username: string;
+  role: string;
 }
