@@ -1,9 +1,8 @@
 # Project Task Integration Documentation
-# [App Name] Integration Documentation
 
 ## Overview
 
-[Description]
+API for task manager built with NestJs
 
 ## Folder Structure
 
