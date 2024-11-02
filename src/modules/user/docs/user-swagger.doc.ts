@@ -1,6 +1,41 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from '@user/dto/update-user-dto';
+import { UserResponseDto } from '../dto/user-response.dto';
+
+
+
+export function GetUserDocs() {
+  return applyDecorators(
+    ApiTags('Users'),
+    ApiOperation({ summary: 'Get User by ID' }),
+    ApiResponse({
+      status: 200,
+      description: 'User retrieved successfully',
+      type: UserResponseDto,
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'User not found',
+    })
+  );
+}
+
+export function GetUserByUsernameDocs() {
+  return applyDecorators(
+    ApiTags('Users'),
+    ApiOperation({ summary: 'Get User by Username' }),
+    ApiResponse({
+      status: 200,
+      description: 'User retrieved successfully',
+      type: UserResponseDto
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'User not found',
+    })
+  );
+}
 
 export function SoftDeleteUserDocs() {
   return applyDecorators(

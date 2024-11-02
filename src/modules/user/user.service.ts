@@ -7,6 +7,7 @@ import { CustomHttpException } from '../../helpers/custom-http-filter';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.schema';
 import { Model } from 'mongoose';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 @Injectable()
 export default class UserService {
@@ -15,6 +16,18 @@ export default class UserService {
   async createUser(createUserPayload: any): Promise<User> {
     const newUser = new this.userModel(createUserPayload);
     return await newUser.save();
+  }
+
+  async findUserById(id: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new CustomHttpException(SYS_MSG.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
+
+    return {
+      message: SYS_MSG.RESOURCE_FOUND('User'),
+      data: user,
+    };
   }
 
   async updateUserRecord(userUpdateOptions: UpdateUserRecordOption) {
@@ -62,17 +75,28 @@ export default class UserService {
     return await GetRecord[identifierType]();
   }
 
-  async softDeleteUser(userId: string, authenticatedUserId: string): Promise<any> {
+  async updateUser(userId: string, updatedUserDto: UpdateUserDto) {
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new CustomHttpException(SYS_MSG.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
+
+    Object.assign(user, updatedUserDto);
+    await user.save();
+    return {
+      message: SYS_MSG.RESOURCE_UPDATED('User'),
+      data: user,
+    };
+  }
+
+  async softDeleteUser(userId: string) {
     const user = await this.userModel.findOne({
       where: { id: userId },
     });
 
     if (!user) {
       throw new CustomHttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-
-    if (user.id !== authenticatedUserId) {
-      throw new CustomHttpException('You are not authorized to delete this user', HttpStatus.UNAUTHORIZED);
     }
 
     await this.userModel.findByIdAndUpdate(userId, { isDeleted: true });
