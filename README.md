@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 # Project Task Integration Documentation
-=======
 # [App Name] Integration Documentation
->>>>>>> 29d9079 (Initial commit)
 
 ## Overview
 
