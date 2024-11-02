@@ -1,11 +1,11 @@
 import { HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import * as SYS_MSG from '@constant/SystemMessages';
+import * as SYS_MSG from '../../constant/SystemMessages';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDTO } from '@auth/dto/create-user.dto';
-import UserService from '@user/user.service';
-import { LoginDto } from '@auth/dto/login.dto';
-import { CustomHttpException } from '@helpers/custom-http-filter';
+import { CreateUserDTO } from './dto/create-user.dto';
+import UserService from '../user/user.service';
+import { LoginDto } from './dto/login.dto';
+import { CustomHttpException } from '../../helpers/custom-http-filter';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
